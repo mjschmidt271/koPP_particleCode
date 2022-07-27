@@ -9,27 +9,39 @@
 
 // these are some structs that are necessary for the ArborX fixed-radius search
 // this was provided by the helpful ArborX/Kokkos developer dalg24
-
-// NOTE: tried to speed things up by being clever, but this is a terribly
-// inefficient way to do things
 template <class MemorySpace>
 struct Points {
-  Kokkos::View<float**, MemorySpace> x;
+  Kokkos::View<float*, MemorySpace> x;
+  Kokkos::View<float*, MemorySpace> y;
+  Kokkos::View<float*, MemorySpace> z;
   int N;
   Points<MemorySpace>(const Kokkos::View<Real**>& _X, const int& dim) {
-    if (dim > 3) {
+    N = _X.extent(1);
+    x = Kokkos::View<float*, MemorySpace>("pts x", N);
+    y = Kokkos::View<float*, MemorySpace>("pts y", N);
+    z = Kokkos::View<float*, MemorySpace>("pts z", N);
+    // FIXME: it'd be cleaner to pre-initialize with zeros and do this in a
+    // dim-length loop for (int i = 0; i < dim; ++i)
+    // {
+    //   /* code */
+    // }
+    if (dim == 1) {
+      Kokkos::deep_copy(x, Kokkos::subview(_X, 0, Kokkos::ALL()));
+      Kokkos::deep_copy(y, 0.0);
+      Kokkos::deep_copy(z, 0.0);
+    } else if (dim == 2) {
+      Kokkos::deep_copy(x, Kokkos::subview(_X, 0, Kokkos::ALL()));
+      Kokkos::deep_copy(y, Kokkos::subview(_X, 1, Kokkos::ALL()));
+      Kokkos::deep_copy(z, 0.0);
+
+    } else if (dim == 3) {
+      Kokkos::deep_copy(x, Kokkos::subview(_X, 0, Kokkos::ALL()));
+      Kokkos::deep_copy(y, Kokkos::subview(_X, 1, Kokkos::ALL()));
+      Kokkos::deep_copy(z, Kokkos::subview(_X, 2, Kokkos::ALL()));
+    } else {
       printf("Dimensions of X = %i. Why so many?", dim);
       exit(EXIT_FAILURE);
     }
-    N = _X.extent(1);
-    x = Kokkos::View<float**, MemorySpace>("pts for ArborX", 3, N);
-    Kokkos::deep_copy(x, 0.0);
-    // NOTE: this is a terribly inefficient way to do things
-    Kokkos::parallel_for(
-        "compute_row", N, KOKKOS_LAMBDA(const int& i) {
-          auto subx = Kokkos::subview(x, Kokkos::make_pair(0, dim), i);
-          Kokkos::deep_copy(subx, Kokkos::subview(_X, Kokkos::ALL(), i));
-        });
   }
 };
 template <class MemorySpace>
@@ -46,7 +58,7 @@ struct ArborX::AccessTraits<Points<MemorySpace>, ArborX::PrimitivesTag> {
   }
   static KOKKOS_FUNCTION ArborX::Point get(Points<MemorySpace> const& points,
                                            size_type i) {
-    return {{points.x(0, i), points.x(1, i), points.x(2, i)}};
+    return {{points.x(i), points.y(i), points.z(i)}};
   }
 };
 template <class MemorySpace>
@@ -59,7 +71,7 @@ struct ArborX::AccessTraits<Spheres<MemorySpace>, ArborX::PredicatesTag> {
   static KOKKOS_FUNCTION auto get(Spheres<MemorySpace> const& x, size_type i) {
     return ArborX::attach(
         ArborX::intersects(ArborX::Sphere{
-            ArborX::Point{x.points.x(0, i), x.points.x(1, i), x.points.x(2, i)},
+            ArborX::Point{x.points.x(i), x.points.y(i), x.points.z(i)},
             x.radius}),
         (int)i);
   }
