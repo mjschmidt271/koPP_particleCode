@@ -24,7 +24,8 @@ int main(int argc, char* argv[]) {
   ko::ScopeGuard guard(argc, argv);
 
   {  // Kokkos scope
-    fmt::print("Kokkos execution space is: {}\n", typeid(ExecutionSpace).name());
+    fmt::print("Kokkos execution space is: {}\n",
+               typeid(ExecutionSpace).name());
     ko::print_configuration(std::cout, true);
 
     // get the input file name from command line argument
@@ -36,28 +37,31 @@ int main(int argc, char* argv[]) {
 
     int tStep = 0;
 
-    if (parts.params.write_plot)
-      {
-        ko::Profiling::pushRegion("write initial positions");
-        // write initial positions/masses to file
-        parts.particleIO.write(parts.params, parts.X, parts.mass, tStep);
-        ko::Profiling::popRegion();
-      }
+    if (parts.params.write_plot) {
+      ko::Profiling::pushRegion("write initial positions");
+      // write initial positions/masses to file
+      parts.particleIO.write(parts.params, parts.X, parts.mass, tStep);
+      ko::Profiling::popRegion();
+    }
 
     ko::Profiling::pushRegion("timestepping");
     // begin time stepping
     for (int tStep = 1; tStep <= parts.params.nSteps; ++tStep) {
+    // for (int tStep = 1; tStep <= 2; ++tStep) {
       // random walk and mass transfer
-      ko::Profiling::pushRegion("RW");
-      particles::random_walk(parts.X, parts.params, parts.rand_pool);
-      ko::Profiling::popRegion();
-      ko::Profiling::pushRegion("MT");
-      parts.mass_trans.transfer_mass_substep();
-      ko::Profiling::popRegion();
+      if (parts.params.pctRW > 0.0) {
+        ko::Profiling::pushRegion("RW");
+        particles::random_walk(parts.X, parts.params, parts.rand_pool);
+        ko::Profiling::popRegion();
+      }
+      if (parts.params.pctRW < 1.0) {
+        ko::Profiling::pushRegion("MT");
+        parts.mass_trans.transfer_mass();
+        ko::Profiling::popRegion();
+      }
       ko::Profiling::pushRegion("tstep_write");
       // write updated particle info to file
-      if (parts.params.write_plot)
-      {
+      if (parts.params.write_plot) {
         parts.particleIO.write(parts.params, parts.X, parts.mass, tStep);
       }
       ko::Profiling::popRegion();

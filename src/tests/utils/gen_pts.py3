@@ -8,13 +8,19 @@ import argparse
 
 # Instantiate the parser and parse them args
 parser = argparse.ArgumentParser(description='Generate particle IC points')
-parser.add_argument('--fname', type=str, required=True,
+parser.add_argument('--infile', type=str, required=True,
                     help='yaml input/output file name--e.g., pts.yaml')
+parser.add_argument('--outfile', type=str, required=True,
+                    help='yaml output file name--e.g., pts_out.yaml')
+parser.add_argument('--iteration', type=str, default=-42,
+                    help='iteration number in ensemble')
 
 args = parser.parse_args()
-fname = str(args.fname)
+infile = str(args.infile)
+outfile = str(args.outfile)
+iteration = int(args.iteration)
 
-with open(fname, 'r') as yamlfile:
+with open(infile, 'r') as yamlfile:
     cur_yaml = yaml.safe_load(yamlfile)
     dim = cur_yaml['dimension']
     N = cur_yaml['Np']
@@ -26,12 +32,12 @@ if pt_style == 'rand':
 elif pt_style == 'equi':
     pts = np.linspace(omega[0], omega[1], N)
 elif pt_style == 'point':
-    with open(fname, 'r') as yamlfile:
+    with open(infile, 'r') as yamlfile:
         cur_yaml = yaml.safe_load(yamlfile)
         X0 = cur_yaml['initial_condition']['space']['X0']
     pts = X0 * np.ones((N, dim))
 elif pt_style == 'hat':
-    with open(fname, 'r') as yamlfile:
+    with open(infile, 'r') as yamlfile:
         cur_yaml = yaml.safe_load(yamlfile)
         X0 = cur_yaml['initial_condition']['space']['X0']
         # note that this is a percentage in yaml file, so divide here by 100
@@ -125,13 +131,15 @@ else:
     raise ValueError("How did we get here??")
 
 # open the file and write the yaml
-with open(fname, 'r') as yamlfile:
+with open(infile, 'r') as yamlfile:
     cur_yaml = yaml.safe_load(yamlfile)
     cur_yaml['points'] = {}
     cur_yaml['points'] = pts_out
     cur_yaml['Np'] = N
+    if iteration > 0:
+        cur_yaml['pFile'] = 'data/particles' + str(iteration) + '.txt'
 
 
 if cur_yaml:
-    with open(fname, 'w') as yamlfile:
+    with open(outfile, 'w') as yamlfile:
         yaml.safe_dump(cur_yaml, yamlfile)

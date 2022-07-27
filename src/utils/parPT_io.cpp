@@ -7,6 +7,7 @@ ParticleIO::ParticleIO(Params& _params, const std::string& yaml_name) {
 
   _params.Np = file_params["Np"].as<int>();
   _params.dim = file_params["dimension"].as<int>();
+  _params.n_chunks = file_params["n_chunks"].as<int>();
   _params.IC_str_space =
       file_params["initial_condition"]["space"]["type"].as<std::string>();
   _params.IC_str_mass =
@@ -182,6 +183,7 @@ void ParticleIO::print_params_summary(const Params& params) {
   fmt::print("dt = {}\n", params.dt);
   fmt::print("nSteps = {}\n", params.nSteps);
   fmt::print("dimension = {}\n", params.dim);
+  fmt::print("N tree decomp. chunks = {}\n", params.n_chunks);
   fmt::print("omega = [{}, {}]\n", params.omega[0], params.omega[1]);
   fmt::print("IC type (space) = {}\n", params.IC_str_space);
   fmt::print("IC type (mass) = {}\n", params.IC_str_mass);
@@ -193,6 +195,7 @@ void ParticleIO::print_params_summary(const Params& params) {
   fmt::print("X0 mass = {}\n", params.X0_mass);
   fmt::print("D = {}\n", params.D);
   fmt::print("pctRW = {}\n", params.pctRW);
+  fmt::print("denom = {}\n", params.denom);
   fmt::print("cdist_coeff = {}\n", params.cdist_coeff);
   fmt::print("cutdist = {}\n", params.cutdist);
   fmt::print("seed_type = {}\n", params.seed_type);

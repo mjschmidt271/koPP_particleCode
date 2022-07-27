@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
   mass_trans.Np1 = params.Np;
   mass_trans.substart = 0;
   mass_trans.subend = params.Np;
-  auto temp = mass_trans.build_sparse_transfer_submat();
+  auto temp = mass_trans.build_sparse_transfer_mat();
 
   auto hcol = ko::create_mirror_view(mass_trans.spmat_views.col);
   auto hrow = ko::create_mirror_view(mass_trans.spmat_views.row);
@@ -108,9 +108,9 @@ int main(int argc, char* argv[]) {
   mass_trans_tree.Nc = params.Np;
   mass_trans_tree.Np1 = params.Np;
   mass_trans_tree.substart = 0;
-  mass_trans_tree.subend = params.Np;
+  mass_trans_tree.subend = params.Np - 1;
   ko::Profiling::pushRegion("build sparsemats");
-  auto temp2 = mass_trans_tree.build_sparse_transfer_submat();
+  auto temp2 = mass_trans_tree.build_sparse_transfer_mat();
   ko::Profiling::popRegion();
 
   auto hcol_tree = ko::create_mirror_view(mass_trans_tree.spmat_views.col);

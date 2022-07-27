@@ -20,7 +20,11 @@ struct Points {
     x = Kokkos::View<float*, MemorySpace>("pts x", N);
     y = Kokkos::View<float*, MemorySpace>("pts y", N);
     z = Kokkos::View<float*, MemorySpace>("pts z", N);
-    // FIXME: it'd be cleaner to pre-initialize and do this in a dim-length loop
+    // FIXME: it'd be cleaner to pre-initialize with zeros and do this in a
+    // dim-length loop for (int i = 0; i < dim; ++i)
+    // {
+    //   /* code */
+    // }
     if (dim == 1) {
       Kokkos::deep_copy(x, Kokkos::subview(_X, 0, Kokkos::ALL()));
       Kokkos::deep_copy(y, 0.0);
@@ -82,7 +86,7 @@ struct TreeCRSPolicy {
     SparseMatViews spmat_views;
     auto ldim = params.dim;
     auto lX = X;
-    auto lNp = Nc;
+    auto lNc = Nc;
     Real denom = params.denom;
     Real c = pow(denom * pi, (Real)ldim / 2.0);
 
@@ -91,8 +95,11 @@ struct TreeCRSPolicy {
     ko::Profiling::pushRegion("create device/float views");
     // Note: this needs to be column-major for some reason, or ArborX messes up
     Points<MemorySpace> fX(lX, ldim);
-    auto subX = ko::View<Real**, MemorySpace>("subX", ldim, subend - substart);
-    ko::deep_copy(subX, ko::subview(lX, ko::ALL(), ko::make_pair(substart, subend)));
+    auto subX = ko::View<Real**, MemorySpace>("subX", ldim, lNc);
+    // NOTE: REMEMBER THIS!!
+    // when using r = make_pair(a, b) in s = subview(v, r), we get s = v([a, b))
+    ko::deep_copy(
+        subX, ko::subview(lX, ko::ALL(), ko::make_pair(substart, subend + 1)));
     Points<MemorySpace> fsubX(subX, ldim);
     float frad = float(params.cutdist);
     ko::Profiling::popRegion();
@@ -111,24 +118,15 @@ struct TreeCRSPolicy {
                   spmat_views.col, spmat_views.rowmap);
     ko::Profiling::popRegion();
 
-    nnz = spmat_views.col.size();
+    // get number of nonzero entries from the extent of the column view
+    nnz = spmat_views.col.extent(0);
 
-    // keeping this around, just in case
-    // sort the tree-generated columns, to make life easier when calculating val
-    // for (int i = 0; i < lNp; ++i) {
-    //   auto sort_view = ko::subview(
-    //       spmat_views.col,
-    //       ko::make_pair(spmat_views.rowmap(i), spmat_views.rowmap(i + 1)));
-    //   auto device_permutation =
-    //       ArborX::Details::sortObjects(ExecutionSpace{}, sort_view);
-    // }
-
-    // FIXME:
+    // NOTE:
     // keeping this around, since it makes some of the transfer mat calculations
     // easier, though it could probably be eliminated with some cleverness
     spmat_views.row = ko::View<int*>("row", nnz);
     ko::parallel_for(
-        "compute_val", lNp, KOKKOS_LAMBDA(const int& i) {
+        "compute_row", lNc, KOKKOS_LAMBDA(const int& i) {
           int begin = spmat_views.rowmap(i);
           int end = spmat_views.rowmap(i + 1);
           for (int j = begin; j < end; ++j) {
@@ -142,7 +140,7 @@ struct TreeCRSPolicy {
           Real dim_sum = 0.0;
           for (int k = 0; k < ldim; ++k) {
             dim_sum +=
-                pow(lX(k, spmat_views.row(i)) - lX(k, spmat_views.col(i)), 2);
+                pow(subX(k, spmat_views.row(i)) - lX(k, spmat_views.col(i)), 2);
           }
           spmat_views.val(i) = exp(dim_sum / -denom) / c;
         });

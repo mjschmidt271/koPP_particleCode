@@ -79,7 +79,7 @@ set(LIBRARIES ${PARPT_LIBS};${LIBRARIES})
 
 # add the unit testing subdirectory (FIXME: automate this one day...)
 # NOTE: in order for this to see the PARPT_LIBS, this has be be after they are
-# appended to LIBRARIES b^.^d
+# appended to LIBRARIES
 add_subdirectory(unit_test)
 
 target_link_libraries(parPT
@@ -94,17 +94,20 @@ target_include_directories(parPT PUBLIC
                            # ${PROJECT_SOURCE_DIR}/src
                           )
 
-set(tests "MT_only" ; "RW_only" ; "RWMT")
+# add the tests subdirectory
+# TODO: One day, get rid of these ad-hoc tests?
+  # ... should probably make them true unit tests
+add_subdirectory(tests)
 
 # FIXME: is this necessary?
 install(TARGETS parPT Utils)
 install(DIRECTORY data DESTINATION ${CMAKE_INSTALL_PREFIX})
-install(DIRECTORY tests DESTINATION ${CMAKE_INSTALL_PREFIX})
-# install(DIRECTORY unit_test DESTINATION ${CMAKE_INSTALL_PREFIX})
-foreach(test ${tests})
-  install(PROGRAMS tests/${test}/run_${test}.sh DESTINATION ${CMAKE_INSTALL_PREFIX}/tests/${test})
-endforeach()
-install(PROGRAMS tests/utils/gen_pts.py3 DESTINATION ${CMAKE_INSTALL_PREFIX}/tests/utils)
+# install(DIRECTORY tests DESTINATION ${CMAKE_INSTALL_PREFIX})
+# # install(DIRECTORY unit_test DESTINATION ${CMAKE_INSTALL_PREFIX})
+# foreach(test ${tests})
+#   install(PROGRAMS tests/${test}/run_${test}.sh DESTINATION ${CMAKE_INSTALL_PREFIX}/tests/${test})
+# endforeach()
+# install(PROGRAMS tests/utils/gen_pts.py3 DESTINATION ${CMAKE_INSTALL_PREFIX}/tests/utils)
 # NOTE: PROGRAMS (vs. FILES) will automatically make the shell script executable
 install(PROGRAMS run.sh DESTINATION ${CMAKE_INSTALL_PREFIX})
 install(PROGRAMS plot.sh DESTINATION ${CMAKE_INSTALL_PREFIX})

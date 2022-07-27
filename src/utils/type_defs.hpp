@@ -2,8 +2,9 @@
 #define TYPE_DEFS_HPP
 
 #include "KokkosKernels_default_types.hpp"
-#include "Kokkos_Random.hpp"
 #include "KokkosSparse_CrsMatrix.hpp"
+#include "KokkosSparse_spadd.hpp"
+#include "Kokkos_Random.hpp"
 #include "parPT_config.hpp"
 
 namespace particles {
@@ -23,8 +24,10 @@ using DeviceType =
                         typename ko::DefaultExecutionSpace::memory_space>;
 using ExecutionSpace = typename DeviceType::execution_space;
 using MemorySpace = typename DeviceType::memory_space;
-using SpmatType = typename KokkosSparse::CrsMatrix<Scalar, Ordinal,
-                                                    DeviceType, void, Offset>;
+using SpmatType =
+    typename KokkosSparse::CrsMatrix<Scalar, Ordinal, DeviceType, void, Offset>;
+using KernelHandle = KokkosKernels::Experimental::KokkosKernelsHandle<
+    Offset, Ordinal, Scalar, ExecutionSpace, MemorySpace, MemorySpace>;
 
 }  // namespace particles
 
