@@ -20,11 +20,8 @@ struct Points {
     x = Kokkos::View<float*, MemorySpace>("pts x", N);
     y = Kokkos::View<float*, MemorySpace>("pts y", N);
     z = Kokkos::View<float*, MemorySpace>("pts z", N);
-    // FIXME: it'd be cleaner to pre-initialize with zeros and do this in a
-    // dim-length loop for (int i = 0; i < dim; ++i)
-    // {
-    //   /* code */
-    // }
+    // TODO: might want to find a more clever way to do this
+      // see reverted commit 845decf for a failed attempt
     if (dim == 1) {
       Kokkos::deep_copy(x, Kokkos::subview(_X, 0, Kokkos::ALL()));
       Kokkos::deep_copy(y, 0.0);
@@ -92,21 +89,25 @@ struct TreeCRSPolicy {
 
     // make a float version of radius and X, as required by arborx, being
     // careful because the X view passed to arborx must have dimension 3
-    ko::Profiling::pushRegion("create device/float views");
-    // Note: this needs to be column-major for some reason, or ArborX messes up
+    ko::Profiling::pushRegion("create points object");
+    // create points object that is float, always 3d, and uses all particles for
+    // neighbor search
     Points<MemorySpace> fX(lX, ldim);
     auto subX = ko::View<Real**, MemorySpace>("subX", ldim, lNc);
     // NOTE: REMEMBER THIS!!
     // when using r = make_pair(a, b) in s = subview(v, r), we get s = v([a, b))
     ko::deep_copy(
         subX, ko::subview(lX, ko::ALL(), ko::make_pair(substart, subend + 1)));
+    // create points object for the particles in this chunk
     Points<MemorySpace> fsubX(subX, ldim);
+    // float version of search radius
     float frad = float(params.cutdist);
     ko::Profiling::popRegion();
 
     // create the bounding value hierarchy and query it for the fixed-radius
     // search
     ko::Profiling::pushRegion("create BVH");
+    // create the BVH for all particles
     ArborX::BVH<MemorySpace> bvh{ExecutionSpace(), fX};
     ko::Profiling::popRegion();
     ko::Profiling::pushRegion("create offset/indices views");
@@ -114,6 +115,8 @@ struct TreeCRSPolicy {
     spmat_views.col = ko::View<int*, MemorySpace>("col", 0);
     ko::Profiling::popRegion();
     ko::Profiling::pushRegion("query BVH");
+    // search the tree for particles in main list that intersect spheres of
+    // radius 'frad' centered at the points in this chunk
     ArborX::query(bvh, ExecutionSpace{}, Spheres<MemorySpace>{fsubX, frad},
                   spmat_views.col, spmat_views.rowmap);
     ko::Profiling::popRegion();
@@ -121,8 +124,8 @@ struct TreeCRSPolicy {
     // get number of nonzero entries from the extent of the column view
     nnz = spmat_views.col.extent(0);
 
-    // NOTE:
-    // keeping this around, since it makes some of the transfer mat calculations
+    // create a COO-style row view
+    // NOTE: keeping this around, since it makes some of the transfer mat calculations
     // easier, though it could probably be eliminated with some cleverness
     spmat_views.row = ko::View<int*>("row", nnz);
     ko::parallel_for(
@@ -134,6 +137,7 @@ struct TreeCRSPolicy {
           }
         });
 
+    // evaluate the Gaussian kernel, based on neighbor separation distances
     spmat_views.val = ko::View<Real*>("val", nnz);
     ko::parallel_for(
         "compute_val", nnz, KOKKOS_LAMBDA(const int& i) {

@@ -4,6 +4,7 @@ add_library(Utils parPT_io.cpp
                   mass_transfer.cpp
                   random.cpp
                   random_walk.cpp
+                  diffusion.cpp
                   particles.cpp)
 # target_link_libraries(Utils ${PARPT_LIBS})
 set(Utils PARENT_SCOPE)

@@ -10,7 +10,6 @@ Particles::Particles(const std::string& _input_file) {
   ko::Profiling::pushRegion("constructor print");
   particleIO.print_params_summary(params);
   ko::Profiling::popRegion();
-  rand_pool = RandPoolType(params.seed_val);
   ko::Profiling::pushRegion("ctor initialize position");
   // initialize the X view
   X = ko::View<Real**>("X", params.dim, params.Np);
@@ -21,7 +20,9 @@ Particles::Particles(const std::string& _input_file) {
   mass = ko::View<Real*>("mass", params.Np);
   initialize_masses();
   ko::Profiling::popRegion();
-  mass_trans = MassTransfer<CRSPolicy>(params, X, mass);
+  ko::Profiling::pushRegion("ctor initialize diffusion");
+  diffusion = Diffusion(X, mass, params);
+  ko::Profiling::popRegion();
 }
 
 void Particles::initialize_masses() {
