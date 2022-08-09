@@ -25,6 +25,7 @@ Particles::Particles(const std::string& _input_file) {
   ko::Profiling::popRegion();
 }
 
+// FIXME: this should be passed in
 void Particles::initialize_masses() {
   switch (params.IC_type_mass) {
     case point_mass: {

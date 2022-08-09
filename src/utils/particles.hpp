@@ -14,11 +14,9 @@ class Particles {
  public:
   // real-valued position
   ko::View<Real**> X;
-  // FIXME: keep a mirror (private?) of these for writing out every xx time
-  // steps mass carried by particles (FIXME: units, )
+  // FIXME: units
   ko::View<Real*> mass;
   // host version of params
-  // FIXME(?): create a device version?
   Params params;
   // diffusion object contains random-walk and mass-transfer
   Diffusion diffusion;

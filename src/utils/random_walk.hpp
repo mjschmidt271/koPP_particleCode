@@ -12,8 +12,8 @@
 namespace particles {
 
 // functor for random-walking particles, templated on the GeneratorPool type
-// Note: RandPoolType is currently hard-coded in the particle class
-// GeneratorPool type
+// NOTE: RandPoolType is currently hard-coded in type_defs.hpp--could possibly
+  // look into relocating to input file
 template <class RandPool>
 struct RandomWalk {
   // Output View for the random numbers

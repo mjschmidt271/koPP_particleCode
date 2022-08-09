@@ -20,14 +20,18 @@ class ParticleIO {
  public:
   ParticleIO(Params& params, const std::string& yaml_name);
   ParticleIO() = default;
+  // initialize the X view
   void set_positions(const Params& params, const std::string& yaml_name,
                             ko::View<Real**>& X);
   void enumerate_IC(Params& params, std::string& IC_str, const YAML::Node& yml,
                     const bool& space);
+  // based on the value given in the yaml file, assign the correct enum
   void enumerate_seed_type(Params& params, std::string& seed_str,
                            const YAML::Node& yml);
   void set_seed_val(Params& params, const YAML::Node& yml);
+  // print summary info at the beginning of runtime
   void print_params_summary(const Params& params);
+  // write positions, masses, etc. to file
   void write(const Params& params, const ko::View<Real**>& X,
              const ko::View<Real*>& mass, const int& i);
 };

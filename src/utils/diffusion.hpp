@@ -20,13 +20,8 @@ using CRSViewPolicy = crs_policy_name;
 
 class Diffusion {
  public:
-  // real-valued position
   ko::View<Real**> X;
-  // FIXME: keep a mirror (private?) of these for writing out every xx time
-  // steps mass carried by particles (FIXME: units, )
   ko::View<Real*> mass;
-  // host version of params
-  // FIXME(?): create a device version?
   Params params;
   MassTransfer<CRSViewPolicy> mass_trans;
   RandPoolType rand_pool;
