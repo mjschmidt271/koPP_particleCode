@@ -47,16 +47,15 @@ Nsteps = shapeData[1] + 1
 
 X = np.ndarray((Np, Nsteps))
 
-for e in range(1, N_ens):
+for e in range(1, N_ens + 1):
     fname_ens = "./data/particles" + str(e) + ".txt"
     with open(fname_ens) as f:
         data = np.loadtxt(f, skiprows=3)
-        for i in range(10):
-            tmpX = np.reshape(data[:, 0], (Np, Nsteps), 'f')
-            if i == 0:
-                X = tmpX
-            else:
-                X = np.concatenate((X, tmpX))
+        tmpX = np.reshape(data[:, 0], (Np, Nsteps), 'f')
+        if e == 1:
+            X = tmpX
+        else:
+            X = np.concatenate((X, tmpX))
 # sort spatially for comparison later
 X.sort(axis=0)
 
@@ -74,12 +73,6 @@ def analytic2d(dim, X, Y, t, sigma, D, L):
            * np.exp(-(((0.5 * L - X)**2 + (0.5 * L - Y)**2)/ (2 * (sigma + 2 * D * t))));
     return sol
 
-
-# number of histogram bins
-# nBins = int(np.floor(np.sqrt(Np * N_ens))) + 1
-# nBins = int(np.floor(np.sqrt(Np))) + 1
-# nBins = 30
-nBins = int(np.floor(max(X[:, -1]) - min(X[:, -1])) * 3)
 
 asoln = analytic1d(X[:, -1], maxT, sigma, D, L)
 

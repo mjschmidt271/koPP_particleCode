@@ -26,7 +26,7 @@ For example, in whichever directory you want to put the code:
             - `docker build --build-arg BUILD_TYPE_IN=<debug, release> -t ko_pt .`
     1. `docker run -it --rm ko_pt bash`
         - This will enter a bash terminal in a Docker container running Ubuntu.
-            - To exit, type: `exit` or `ctrl + d`.
+            - To exit, type: `exit` or <kbd>ctrl</kbd> + <kbd>d</kbd>.
     1. `./run.sh` runs a simple example or `make test` to run the unit tests (so far only considering the ArborX fixed-radius search).
         - The example can be modified by editing the input file `src/data/particleParams.yaml`.
             - Note that if you edit the one in the build directory, it will be overwritten by the original after a `make install`. Similarly, if you edit the one in the top-level `src` directory, `make install` will be required before you can run the new simulation.

@@ -1,10 +1,10 @@
 ---
 #===============================================================================
-# Input parameters for a simple 1D, purely diffusive mass-transfer simulation
+# Input parameters for a simple 2D, purely diffusive random walk simulation
 #===============================================================================
 
 # number of particles
-Np: 45
+Np: 1001
 # number of spatial dimensions
 dimension: 2
 # domain limits
@@ -14,7 +14,7 @@ initial_condition:
     # initial particle positions, with options:
     # [point (all the same, center of domain), uniform (random),
     #  equi(-spaced), hat (evenly-spaced over limited part of domain)]
-    type: equi
+    type: point
     # particle starting position (for point source)
     X0: 25.0
     hat_pct: 20.0
@@ -39,16 +39,11 @@ cdist_coeff: 6
 # Note: if type is not provided, this defaults to... "default", and if type is
 # anything other than "specified," the value does nothing. Finally "specified",
 # with no provided value also defaults to "default."
-rand_seed_type: default
-rand_seed_value: 5374857
+rand_seed_type: clock
+# rand_seed_value: 5374857
 # output file name
 pFile: data/particles.txt
-# random seed type ["clock_rand", "specified_rand", "default_rand"] and/or value
-# "clock_rand" seeds from clock time, "specified_rand" uses the defined seed below,
-# and "default_rand" uses the arbitrarily-chosen value of 5374857, and if none
-# are provided the default value is used.
-rand_seed_type: default
-rand_seed_value: 5374857
+# rand_seed_value: 5374857
 # whether to write position/mass plotting data or not (no => for profiling)
 # FIXME: change this to write frequency later
 write_plot: true

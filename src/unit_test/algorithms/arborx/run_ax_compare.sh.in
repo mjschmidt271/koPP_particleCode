@@ -47,6 +47,7 @@ do
     ${THIS_DIR}/AX_compare ${inputfile}
 done
 
+# when timing, get rid of the extra files
 # kp_reader *.dat > time_data.txt
 # mike's laptop
 # rm ${MACHINE}*.dat

@@ -24,15 +24,14 @@ export INSTALL_DIR=@CMAKE_BINARY_DIR@
 
 export PT_EXE=${INSTALL_DIR}/src/parPT
 
+# number of iterations in an ensemble of runs (per dimensionality)
 export ITERATIONS=10
-# may need to try more than once, if failing, due to stochastic noise
-export ERROR_ITERATIONS=3
 
 # loop over dimensions
-for ((i=1; i<=1; i++))
+for ((i=2; i<=2; i++))
 do
     rm -f data/particles*.txt
-    rm -f data/*_test*d_out.yaml
+    rm -f data/*_test${i}d_out.yaml
     rm -f data/ens.txt
 
     export YAML_IN=${THIS_DIR}/data/rw_test_${i}d.yaml
@@ -44,52 +43,26 @@ do
     echo "infile =  /data/rw_test_${i}d.yaml"
     echo "==========================================="
 
-    # loop over ensemble for trying again on error
-    for ((err_ens=1; err_ens<=$ERROR_ITERATIONS; err_ens++))
+    # loop over ensemble for averaging
+    for ((ens=1; ens<=$ITERATIONS; ens++))
     do
-        # loop over ensemble for averaging
-        for ((ens=1; ens<=$ITERATIONS; ens++))
-        do
-            export YAML_RUN=${THIS_DIR}/data/rw_test_${i}d_out${ens}.yaml
+        export YAML_RUN=${THIS_DIR}/data/rw_test_${i}d_out${ens}.yaml
 
-            # write the points to the bottom of the yaml input
-            ${THIS_DIR}/utils/gen_pts.py3 --infile=${YAML_IN} --outfile=${YAML_RUN}\
-                                          --iteration=${ens}
+        # write the points to the bottom of the yaml input
+        ${THIS_DIR}/utils/gen_pts.py3 --infile=${YAML_IN} --outfile=${YAML_RUN}\
+                                      --iteration=${ens}
 
-            # run the program and redirect the error output
-            $PT_EXE $YAML_RUN -v > a.out 2> a.err
+        # run the program and redirect the error output
+        $PT_EXE $YAML_RUN -v > a.out 2> a.err
 
-            # echo -ne "iteration = ${ens} \r"
+        # echo -ne "iteration = ${ens} \r"
 
-        done
-
-        rm data/rw_test_1d_out*.yaml
-        echo "$ITERATIONS" > data/ens.txt
-        # verify vs analytical solution
-        ${THIS_DIR}/utils/verify_rw.py3
-        # store the error code to determine if we need to continue the error
-        # ensemble
-        export ERR_CODE=$?
-        if (( $ERR_CODE >= 1 )); then # if unsuccessful
-            # if we've reached the defined limit, exit this script with error
-            if (( $err_ens == $ERROR_ITERATIONS )); then
-                echo "ERROR: completed error ensemble without passing."
-                echo "Note: because this is a stochastic ensemble, running \
-                      once or twice more may be a good idea."
-                rm data/particles*.txt
-                exit 1
-            fi
-            echo "Soft Failure: trying again for error_ens number = ${err_ens}"
-            continue
-        else # successful move on to next higher dimension
-            echo "SUCCESS for ${i}-d RW test!"
-            rm data/particles*.txt
-            break
-        fi
     done
-done
 
-# rm data/particles*.txt
+    echo "$ITERATIONS" > data/ens.txt
+    # verify vs analytical solution
+    ${THIS_DIR}/utils/verify_rw.py3
+done
 
 # # used when timing
 # kp_reader *.dat > time_data.txt

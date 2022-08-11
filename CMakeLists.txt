@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.17)
 CMAKE_POLICY(SET CMP0074 NEW)
 
 # set the project name and version
@@ -9,9 +9,9 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 enable_testing()
-
-# FIXME: pull this out to the config file when things are release-ish
-# set(CMAKE_BUILD_TYPE "Debug")
+# this is to account for the stochastic variability with random walks
+# we give the tests 3 trys
+set(CMAKE_CTEST_ARGUMENTS --repeat until-pass:3)
 
 string(TOUPPER "${PARPT_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 if (CMAKE_BUILD_TYPE STREQUAL DEBUG)
