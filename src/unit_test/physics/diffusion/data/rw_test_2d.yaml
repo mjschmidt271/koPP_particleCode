@@ -9,6 +9,8 @@ Np: 1001
 dimension: 2
 # domain limits
 omega: [0, 25]
+# number of chunks over which to to serialize the tree-decomposition
+n_chunks: 4
 initial_condition:
   space:
     # initial particle positions, with options:
