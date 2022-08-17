@@ -28,7 +28,7 @@ export PT_EXE=${INSTALL_DIR}/src/parPT
 export ITERATIONS=10
 
 # loop over dimensions
-for ((i=1; i<=2; i++))
+for ((i=2; i<=2; i++))
 do
     # rm -f data/particles*.txt
     # rm -f data/*_test${i}d_out.yaml
@@ -61,7 +61,7 @@ do
 
     echo "$ITERATIONS" > data/ens.txt
     # verify vs analytical solution
-    ${THIS_DIR}/utils/verify_rw.py3
+    ${THIS_DIR}/utils/verify_${i}dRW.py3
 done
 
 # # used when timing

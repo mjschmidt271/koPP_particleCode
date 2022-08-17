@@ -30,13 +30,9 @@ export USE_CUDA=false
 # note that cuda builds require the CXX compiler to be the
 # kokkos-provided nvcc_wrapper
 export MAC_SERIAL_CPP="clang++"
-export MAC_SERIAL_C="clang"
 export MAC_OMP_CPP="g++-11"
-export MAC_OMP_C="gcc-11"
 export LINUX_CPP="g++"
-export LINUX_C="gcc"
 export S102_CPP="mpicxx"
-export S102_C="mpicc"
 # if you are using a machine that isn't listed below and you are building
 # for GPU, provide the architecture name
 # see the "Architecture Keywords" section of:
@@ -78,7 +74,6 @@ if [ $MACHINE = s1046231 ]; then
 elif [ $MACHINE = s1024454 ]; then
     export LIBDIR=$LINUX_LIBDIR
     export LINUX_CPP=$S102_CPP
-    export LINUX_C=$S102_CPP
     if [ "$USE_OPENMP" = false ] && [ "$USE_CUDA" = false ]; then
         echo "Building for serial"
         echo "ERROR: Unsupported build for this machine"
@@ -269,15 +264,12 @@ then
     else
         export CXX=$LINUX_CPP
     fi
-    export CC=$LINUX_C
 else
     if [ "$USE_OPENMP" = true ]
     then
         export CXX=$MAC_OMP_CPP
-        export CC=$MAC_OMP_C
     else
         export CXX=$MAC_SERIAL_CPP
-        export CC=$MAC_SERIAL_C
     fi
 fi
 
@@ -298,7 +290,6 @@ cmake .. \
     -D PARPT_BUILD_TYPE=$BUILD_TYPE \
     -D CMAKE_VERBOSE_MAKEFILE=ON \
     -D CMAKE_CXX_COMPILER=$CXX \
-    -D CMAKE_C_COMPILER=$CC \
     -D PARPT_USE_OPENMP=$USE_OPENMP \
     -D PARPT_USE_CUDA=$USE_CUDA \
     -D PARPT_PRECISION=$REAL_TYPE \
