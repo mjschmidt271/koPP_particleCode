@@ -4,7 +4,7 @@
 #===============================================================================
 
 # number of particles
-Np: 45
+Np: 55
 # number of spatial dimensions
 dimension: 2
 # domain limits

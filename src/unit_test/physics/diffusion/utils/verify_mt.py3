@@ -49,30 +49,30 @@ def analytic1d(X, t, sigma, D, L):
     sol =  (1 / np.sqrt(2 * np.pi * (sigma + 2 * D * t)))\
         * np.exp(-((0.5 * L - X[:])**2 / (2 * (sigma + 2 * D * t))));
     return sol
-def analytic2d(dim, X, Y, t, sigma, D, L):
-    sol =  (1 / np.power(2 * np.pi * (sigma + 2 * D * t), float(dim) / 2.0))\
-           * np.exp(-(((0.5 * L - X)**2 + (0.5 * L - Y)**2)/ (2 * (sigma + 2 * D * t))));
+def analytic2d(X, Y, t, D, X0):
+    sol = (1 / (4 * np.pi * D * t))\
+          * np.exp(-(((X0 - X)**2 + (X0 - Y)**2) / (4 * D * t)));
     return sol
 
 if dim == 1:
     asoln = analytic1d(X[0, :, -1], maxT, sigma, D, L)
     asoln = asoln / sum(asoln)
-    error = np.linalg.norm(asoln - mass[:, -1])
+    error_2 = np.linalg.norm(asoln - mass[:, -1])
     mse = np.square(np.subtract(asoln, mass[:, -1])).mean()
     rmse = np.sqrt(mse)
 elif dim == 2:
-    asoln = analytic2d(dim, X[0, :, -1], X[1, :, -1], maxT, sigma, D, L)
+    asoln = analytic2d(X[0, :, -1], X[1, :, -1], maxT, D, X0_mass)
     asoln = asoln / sum(asoln)
-    error = np.linalg.norm(asoln - mass[:, -1])
+    error_2 = np.linalg.norm(asoln - mass[:, -1])
     mse = np.square(np.subtract(asoln, mass[:, -1])).mean()
     rmse = np.sqrt(mse)
-# print('error = ', error, 'rmse = ', rmse)
+print('2-norm error = ', error_2, '\nmse = ', mse, '\nrmse = ', rmse)
 
 if dim == 1:
     tol = 1.0e-14
 elif dim == 2:
-    tol = 1.0e-3
+    tol = 5.0e-3
 
-assert error <= tol, '{}-d MT error too high: error = {}'.format(dim, error)
+assert rmse <= tol, '{}-d MT error too high: error = {}'.format(dim, rmse)
 
 print('SUCCESS: {}-d MT passes with tolerance = {}.'.format(dim, tol))

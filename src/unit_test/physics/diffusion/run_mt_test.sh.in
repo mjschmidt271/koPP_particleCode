@@ -47,6 +47,11 @@ do
 
     # verify against analytical solution
     ${THIS_DIR}/utils/verify_mt.py3
+    export ERR_CODE=$?
+    rm -f $YAML_RUN
+    if [ $ERR_CODE -ne 0 ]; then
+        exit 42
+    fi
 done
 
 # # used when timing
