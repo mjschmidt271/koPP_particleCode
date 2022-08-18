@@ -71,7 +71,7 @@ print('2-norm error = ', error_2, '\nmse = ', mse, '\nrmse = ', rmse)
 if dim == 1:
     tol = 1.0e-14
 elif dim == 2:
-    tol = 5.0e-3
+    tol = 1.0e-3
 
 assert rmse <= tol, '{}-d MT error too high: error = {}'.format(dim, rmse)
 

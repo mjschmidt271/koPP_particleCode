@@ -45,10 +45,12 @@ do
     # run the program and redirect the error output
     $PT_EXE $YAML_RUN -v > a.out 2> a.err
 
+    rm -f $YAML_RUN
+
     # verify against analytical solution
     ${THIS_DIR}/utils/verify_mt.py3
     export ERR_CODE=$?
-    rm -f $YAML_RUN
+    rm -f data/particles*.txt
     if [ $ERR_CODE -ne 0 ]; then
         exit 42
     fi
@@ -58,4 +60,6 @@ done
 # kp_reader *.dat > time_data.txt
 # # mike's laptop
 # rm ${MACHINE}*.dat
+
+
 

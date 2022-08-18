@@ -24,7 +24,7 @@ initial_condition:
     # initial mass distribution, with options:
     # [point (delta), heaviside (interface = X0), gaussian (with var = sigma)]
     type: point
-    X0: 25.0
+    X0: 12.5
 # total simulation time
 maxT: 10.0
 # time step length
