@@ -1,34 +1,38 @@
-# cpp_particleCode
+# Kokkos-enabled, Performance-portable Particle Code
 <!-- use this page when I switch to mkdocs -->
 <!-- https://majianglin2003.medium.com/how-to-use-markdown-and-mkdocs-to-write-and-organize-technical-notes-9aad3f3b9c82 -->
 
 This repository contains random walk particle tracking code with SPH-style mass transfers, written in C++ and designed for parallel performance portability, using [Kokkos](https://github.com/kokkos/kokkos).
 
-The only current dependencies are **cmake** and __python3__ (with __numpy__ and __matplotlib__, if you want to use some of the plotting utilities). On Mac, your easiest option is to use [Homebrew](https://docs.brew.sh/Installation) and then `brew install cmake`, `brew install python`, `pip install numpy`, and `pip install matplotlib`. Note that if python scripts aren't running properly, you may need to use `pip3` in the above. If you're looking to run unit tests that involve python scripts, then you'll likely have to install more python packages until your code stops crashing. Also, some of the tests are verified using __Jupyter Notebooks__, which can be taken care of via [Homebrew](https://docs.brew.sh/Installation) via `brew install jupyter`, `brew install notebook`, and then run the notebook with `jupyter-notebook <notebook>.ipynb` which will open a browser window.
+The only current dependencies are **cmake** and __python3__ (with some package dependencies, including __numpy__ and __matplotlib__, if you want to use some of the plotting utilities). On Mac, your easiest option is to use [Homebrew](https://docs.brew.sh/Installation) and then `brew install cmake`, `brew install python`, `pip install numpy`, and `pip install matplotlib`. Note that if python scripts aren't running properly, you may need to use `pip3` in the above. If you're looking to run unit tests that involve python scripts, then you'll likely have to install more python packages until your code stops crashing. Also, some of the tests are verified using __Jupyter Notebooks__, which can be taken care of via [Homebrew](https://docs.brew.sh/Installation) via `brew install jupyter`, `brew install notebook`, and then run the notebook with `jupyter-notebook <notebook>.ipynb` which will open a browser window.
 
 <ins>**Note:**</ins> All of the above dependencies can be avoided by using the [Docker](https://docs.docker.com/get-docker/) build instructions below. However, first you must install Docker :upside_down_face: (`brew install docker`).
 
-Note that simply downloading the repository will not work with the external projects (Kokkos, Kokkos Kernels, yaml-cpp, ArborX), as they are git submodules.
-As such, the repository must be cloned.
+Note that simply downloading the repository will not include the third-party libraries (Kokkos, Kokkos Kernels, yaml-cpp, ArborX), as they are git submodules.
+For that reason, the best bet is to clone the repository.
 For example, in whichever directory you want to put the code:
+
+## Build Instructions
 
 1. Clone the repository:
     - If you use https (this is the case if you haven't set up a [github ssh key](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh)):
-        - `git clone --recurse-submodules -j8 https://github.com/mschmidt271/cpp_particleCode.git`
+        - `git clone --recurse-submodules -j8 https://github.com/mschmidt271/koPP_particleCode.git`
     - If you use ssh:
-        - `git clone --recurse-submodules -j8 git@github.com:mschmidt271/cpp_particleCode.git`
+        - `git clone --recurse-submodules -j8 git@github.com:mschmidt271/koPP_particleCode.git`
     - Note: the `-j8` is a parallel flag, allowing git to fetch up to 8 submodules in parallel.
-1. `cd cpp_particleCode`
+1. `cd koPP_particleCode`
 
 - To build and run using Docker (recommended for ease):
+    1. Start docker.
+        - Trust me--you'll forget it eventually and lose 15 minutes of your life debugging :)
     1. `docker build -t ko_pt .`
         - Default build is `debug` for now. However, if you want to explicitly choose the build mode, use:
             - `docker build --build-arg BUILD_TYPE_IN=<debug, release> -t ko_pt .`
     1. `docker run -it --rm ko_pt bash`
         - This will enter a bash terminal in a Docker container running Ubuntu.
             - To exit, type: `exit` or <kbd>ctrl</kbd> + <kbd>d</kbd>.
-    1. `./run.sh` runs a simple example or `make test` to run the unit tests (so far only considering the ArborX fixed-radius search).
-        - The example can be modified by editing the input file `src/data/particleParams.yaml`.
+    1. `./run.sh` runs a simple example or `make test` to run the verification/unit tests.
+        - The example launched by `./run.sh` can be modified by editing the input file `src/data/particleParams.yaml`.
             - Note that if you edit the one in the build directory, it will be overwritten by the original after a `make install`. Similarly, if you edit the one in the top-level `src` directory, `make install` will be required before you can run the new simulation.
         - Some different examples can be found in the `tests` directory, containing `MT_only`, `RWMT`, and `RW_only` (MT = mass-transfer, RW = random walk).
 
@@ -59,6 +63,7 @@ For example, in whichever directory you want to put the code:
     1. `make -j install`
         - Note: similarly to above, the `-j` flag executes the make using the max number of cores available.
         - Note: the current behavior, as given in `config.sh` is to install to the build directory. As such, you can re-build/install/run from the same place without changing directories repeatedly.
+            - If you want to customize this behavior, you can change the line toward the bottom that reads `CMAKE_INSTALL_PREFIX="./"` to indicate a directory other than `build` (e.g., `./` = this directory).
     1. `./run.sh` to run a basic example.
         - The example can be modified by editing the input file `src/data/particleParams.yaml`.
             - Note that if you edit the one in the build directory, it will be overwritten by the original after a `make install`. Similarly, if you edit the one in the top-level `src` directory, `make install` will be required before you can run the new simulation.
@@ -68,7 +73,7 @@ For example, in whichever directory you want to put the code:
 Building with OpenMP does work on my personal Mac running Mojave with `gcc v12.0.0` and `libomp v11.0.0`, as well as on a couple of Linux workstations, using various gcc compilers.
 <!-- "brew info libomp" will give the openmp version if it was installed via Homebrew -->
 This is achieved by uncommenting the relevant lines in `config.sh` so that `export USE_OPENMP=True` and ensuring the proper compiler is pointed to with the environment variables below.
-If you are on an Apple machine, it is recommended to use the GCC compiler with compatible OpenMP. The easiest way to achieve this is with Homebrew, by running
+If you are on an Apple machine, it is recommended to use the __gcc__ compilers with compatible OpenMP. The easiest way to achieve this is with Homebrew, by running
 ```
 brew install gcc
 brew install libomp
