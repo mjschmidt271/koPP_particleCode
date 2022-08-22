@@ -11,20 +11,34 @@ export SEARCH_TYPE="tree"
 # consider changing this to -O2 if problems arise
 export BUILD_TYPE="debug"
 # export BUILD_TYPE="release"
+# default to installing in the direction the `make` command is run
+# (most commonly the 'build' directory)
+export INSTALL_LOCATION="./"
+# ==============================================================================
+# parallel accelerator options
 # ==============================================================================
 # choose only one of these build options
 # (1)
-# export USE_OPENMP=false
-# export USE_CUDA=false
-# (2)
-export USE_OPENMP=true
+export USE_OPENMP=false
 export USE_CUDA=false
+# (2)
+# export USE_OPENMP=true
+# export USE_CUDA=false
 # (3) ***NOT CURRENTLY SUPPORTED***
 # export USE_OPENMP=false
 # export USE_CUDA=true
 # (4)
 # export USE_OPENMP=true
 # export USE_CUDA=true
+# ==============================================================================
+# if you are using a machine that isn't listed below and you are building
+# for GPU, provide the architecture name
+# see the "Architecture Keywords" section of:
+# https://github.com/kokkos/kokkos/wiki/Compiling
+# export GPU_ARCHITECTURE="schmidt27"
+# ==============================================================================
+# ==============================================================================
+# compiler options
 # ==============================================================================
 # change these to the compilers you plan to use
 # note that cuda builds require the CXX compiler to be the
@@ -33,17 +47,14 @@ export MAC_SERIAL_CPP="clang++"
 export MAC_OMP_CPP="g++-11"
 export LINUX_CPP="g++"
 export S102_CPP="mpicxx"
-# if you are using a machine that isn't listed below and you are building
-# for GPU, provide the architecture name
-# see the "Architecture Keywords" section of:
-# https://github.com/kokkos/kokkos/wiki/Compiling
-# export GPU_ARCHITECTURE="schmidt27"
 # ==============================================================================
 # I wouldn't change this unless you have good reason and know what you're doing
 # ==============================================================================
 export MAC_LIBDIR="lib"
 export LINUX_LIBDIR="lib64"
 export WIN_LIBDIR="???"
+# ==============================================================================
+# machine-dependent build options
 # ==============================================================================
 # these are for the various machines I use.
 # I would recommend either adding similar logic for yours, or just
@@ -286,7 +297,7 @@ rm -rf CMake*
 # -D PARPT_USE_OPENMP=$USE_OPENMP\
 # -D PARPT_USE_CUDA=$USE_CUDA
 cmake .. \
-    -D CMAKE_INSTALL_PREFIX="./" \
+    -D CMAKE_INSTALL_PREFIX=$INSTALL_LOCATION \
     -D PARPT_BUILD_TYPE=$BUILD_TYPE \
     -D CMAKE_VERBOSE_MAKEFILE=ON \
     -D CMAKE_CXX_COMPILER=$CXX \
