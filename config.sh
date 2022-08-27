@@ -19,11 +19,11 @@ export INSTALL_LOCATION="./"
 # ==============================================================================
 # choose only one of these build options
 # (1)
-export USE_OPENMP=false
-export USE_CUDA=false
-# (2)
-# export USE_OPENMP=true
+# export USE_OPENMP=false
 # export USE_CUDA=false
+# (2)
+export USE_OPENMP=true
+export USE_CUDA=false
 # (3) ***NOT CURRENTLY SUPPORTED***
 # export USE_OPENMP=false
 # export USE_CUDA=true
@@ -44,7 +44,7 @@ export USE_CUDA=false
 # note that cuda builds require the CXX compiler to be the
 # kokkos-provided nvcc_wrapper
 export MAC_SERIAL_CPP="clang++"
-export MAC_OMP_CPP="g++-11"
+export MAC_OMP_CPP="g++-12"
 export LINUX_CPP="g++"
 export S102_CPP="mpicxx"
 # ==============================================================================

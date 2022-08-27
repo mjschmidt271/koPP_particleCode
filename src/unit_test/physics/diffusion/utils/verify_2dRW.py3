@@ -183,7 +183,7 @@ error_std = [np.abs(particle_std[0] - np.sqrt(2.0 * D * maxT)),
 
 xy_str = ['x', 'y']
 
-mse_tol = 1.0e-7
+mse_tol = 1.0e-6
 assert mse <= mse_tol, (f'2D MSE error too high: error = {mse:.4e}. ' +
                         f'tol = {mse_tol:.1e}.')
 maxval_tol = 5.0e-3

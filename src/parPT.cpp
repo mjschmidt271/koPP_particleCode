@@ -37,12 +37,10 @@ int main(int argc, char* argv[]) {
 
     int tStep = 0;
 
-    if (parts.params.write_plot) {
-      ko::Profiling::pushRegion("write initial positions");
-      // write initial positions/masses to file
-      parts.particleIO.write(parts.params, parts.X, parts.mass, tStep);
-      ko::Profiling::popRegion();
-    }
+    ko::Profiling::pushRegion("write initial positions");
+    // write initial positions/masses to file
+    parts.particleIO.write(parts.params, parts.X, parts.mass, tStep);
+    ko::Profiling::popRegion();
 
     ko::Profiling::pushRegion("timestepping");
     // begin time stepping
@@ -56,6 +54,10 @@ int main(int argc, char* argv[]) {
         parts.particleIO.write(parts.params, parts.X, parts.mass, tStep);
       }
       ko::Profiling::popRegion();
+    }
+    // still write final condition, even if not writing time steps
+    if (not parts.params.write_plot) {
+      parts.particleIO.write(parts.params, parts.X, parts.mass, tStep);
     }
     ko::Profiling::popRegion();
 

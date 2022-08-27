@@ -31,7 +31,7 @@ struct RandomUniform {
     // Get a random number state from the pool for the active thread
     gen_type rgen = rand_pool.get_state();
 
-    size_t dim = vals.extent(0);
+    // size_t dim = vals.extent(0);
       // draw random normal numbers, with mean and variance provided
       vals(j, i) = rgen.drand(start, end);
 
