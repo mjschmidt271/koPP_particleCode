@@ -2,7 +2,7 @@ build
 parPT_config.hpp
 *.ipynb_checkpoints*
 profiling_results/
-build_cuda/
+build_*
 .sandia
 .wgetrc
 .env

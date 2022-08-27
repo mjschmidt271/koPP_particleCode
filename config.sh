@@ -46,7 +46,7 @@ export USE_CUDA=false
 export MAC_SERIAL_CPP="clang++"
 export MAC_OMP_CPP="g++-12"
 export LINUX_CPP="g++"
-export S102_CPP="mpicxx"
+export S102_CPP="g++"
 # ==============================================================================
 # I wouldn't change this unless you have good reason and know what you're doing
 # ==============================================================================
@@ -95,11 +95,11 @@ elif [ $MACHINE = s1024454 ]; then
         # export AX_ROOT="${HOME_DIR}/ArborX/"
     elif [ "$USE_OPENMP" = true ] && [ "$USE_CUDA" = false ]; then
         echo "Building for OpenMP without CUDA"
-        export KO_ROOT="${HOME_DIR}/kokkos/install_omp_${BUILD_TYPE}"
-        export KK_ROOT="${HOME_DIR}/kokkos-kernels/install_omp_${BUILD_TYPE}"
-        export YCPP_ROOT="${HOME_DIR}/yaml-cpp/install"
-        export AX_ROOT="${HOME_DIR}/ArborX/install_omp_${BUILD_TYPE}"
-        export SP_ROOT="${HOME_DIR}/spdlog/install_${BUILD_TYPE}"
+        # export KO_ROOT="${HOME_DIR}/kokkos/install_omp_${BUILD_TYPE}"
+        # export KK_ROOT="${HOME_DIR}/kokkos-kernels/install_omp_${BUILD_TYPE}"
+        # export YCPP_ROOT="${HOME_DIR}/yaml-cpp/install"
+        # export AX_ROOT="${HOME_DIR}/ArborX/install_omp_${BUILD_TYPE}"
+        # export SP_ROOT="${HOME_DIR}/spdlog/install_${BUILD_TYPE}"
     elif [ "$USE_OPENMP" = false ] && [ "$USE_CUDA" = true ]; then
         echo "Building without OpenMP"
         echo "ERROR: Unsupported build for this machine"
@@ -111,12 +111,12 @@ elif [ $MACHINE = s1024454 ]; then
         # export AX_ROOT="${HOME_DIR}/ArborX/"
     elif [ "$USE_OPENMP" = true ] && [ "$USE_CUDA" = true ]; then
         echo "Building for OpenMP and CUDA"
-        export DEVICE_ARCH="MAXWELL52"
-        export KO_ROOT="${HOME_DIR}/kokkos/install_cuda_${BUILD_TYPE}"
-        export KK_ROOT="${HOME_DIR}/kokkos-kernels/install_cuda_${BUILD_TYPE}"
-        export YCPP_ROOT="${HOME_DIR}/yaml-cpp/install"
-        export AX_ROOT="${HOME_DIR}/ArborX/install_cuda_${BUILD_TYPE}"
-        export SP_ROOT="${HOME_DIR}/spdlog/install_${BUILD_TYPE}"
+        # export DEVICE_ARCH="MAXWELL52"
+        # export KO_ROOT="${HOME_DIR}/kokkos/install_cuda_${BUILD_TYPE}"
+        # export KK_ROOT="${HOME_DIR}/kokkos-kernels/install_cuda_${BUILD_TYPE}"
+        # export YCPP_ROOT="${HOME_DIR}/yaml-cpp/install"
+        # export AX_ROOT="${HOME_DIR}/ArborX/install_cuda_${BUILD_TYPE}"
+        # export SP_ROOT="${HOME_DIR}/spdlog/install_${BUILD_TYPE}"
     else
         echo "ERROR: Unsupported build for this machine"
         exit
