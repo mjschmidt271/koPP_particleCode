@@ -15,8 +15,8 @@ export THIS_DIR=@CMAKE_CURRENT_BINARY_DIR@/${TEST_NAME}
 export INSTALL_DIR=@CMAKE_BINARY_DIR@
 
 # kernel logger
-export KOKKOS_PROFILE_LIBRARY=${HOME}/kokkos-tools/kp_kernel_logger.so
-export PATH=${PATH}:${HOME}/kokkos-tools/
+# export KOKKOS_PROFILE_LIBRARY=${HOME}/kokkos-tools/kp_kernel_logger.so
+# export PATH=${PATH}:${HOME}/kokkos-tools/
 
 export YAML_IN=${THIS_DIR}/data/${TEST_NAME}_input.yaml
 export YAML_RUN=${THIS_DIR}/data/${TEST_NAME}_run.yaml
