@@ -27,10 +27,7 @@ else()
 endif()
 message(STATUS "Using ${PARPT_SEARCH_TYPE} for fixed-radius search")
 
-# generate a configure file
-  # currently, just provides the install prefix
-  # NOTE: here, and below, PROJECT_SOURCE_DIR refers to the root directory,
-          # since that's where the project() call is
+# generate the configure file
 configure_file("${PROJECT_SOURCE_DIR}/src/utils/parPT_config.hpp.in"
                "${PROJECT_BINARY_DIR}/src/utils/parPT_config.hpp"
                @ONLY
@@ -39,23 +36,11 @@ configure_file("${PROJECT_SOURCE_DIR}/src/utils/parPT_config.hpp.in"
 message(STATUS "PARPT_REAL_TYPE = ${PARPT_REAL_TYPE}")
 
 list(APPEND PARPT_INCDIRS;
-            ${PROJECT_SOURCE_DIR}/src/utils;
-            ${PROJECT_BINARY_DIR}/src/utils)
+     ${PROJECT_SOURCE_DIR}/src/utils;
+     ${PROJECT_BINARY_DIR}/src/utils)
 
-# add the utils directory, with the utilities library and plotting directory
+# add the utils directory
 add_subdirectory(utils)
-
-# # add the external kokkos library
-# find_library(kk kokkoscore HINTS $ENV{KOKKOS_LIBDIR})
-
-# # Report the installation prefix.
-# message(STATUS "Kokkos found at ${kk}")
-
-# # add the external yaml-cpp library
-# find_library(ycpp yaml-cpp HINTS $ENV{YAMLCPP_LIBDIR})
-
-# # Report the installation prefix.
-# message(STATUS "yaml-cpp found at ${ycpp}")
 
 # Report the installation prefix.
 message(STATUS "Installation prefix is ${CMAKE_INSTALL_PREFIX}")
@@ -69,45 +54,21 @@ if(PARPT_USE_CUDA)
   list(APPEND LIBRARIES; ${CUDA_cusparse_LIBRARY})
 endif()
 
-# add_dependencies(PARPT_LIBS)
-
-# set(PARPT_LIBS Utils)
-# set(LIBRARIES ${LIBRARIES};${PARPT_LIBS})
-
 set(PARPT_LIBS Utils)
-set(LIBRARIES ${PARPT_LIBS};${LIBRARIES})
+set(LIBRARIES ${PARPT_LIBS}; ${LIBRARIES})
 
-# add the unit testing subdirectory (FIXME: automate this one day...)
 # NOTE: in order for this to see the PARPT_LIBS, this has be be after they are
 # appended to LIBRARIES
-add_subdirectory(unit_test)
+add_subdirectory(tests)
 
-target_link_libraries(parPT
-                      ${LIBRARIES}
-                      )
+target_link_libraries(parPT ${LIBRARIES})
 
 message(STATUS "Libraries = ${LIBRARIES}")
 
 # add the include directories
-target_include_directories(parPT PUBLIC
-                           ${PARPT_INCDIRS}
-                           # ${PROJECT_SOURCE_DIR}/src
-                          )
+target_include_directories(parPT PUBLIC ${PARPT_INCDIRS})
 
-# add the tests subdirectory
-# TODO: One day, get rid of these ad-hoc tests?
-  # ... should probably make them true unit tests
-add_subdirectory(tests)
+# add the examples subdirectory
+add_subdirectory(examples)
 
-# FIXME: is this necessary?
 install(TARGETS parPT Utils)
-install(DIRECTORY data DESTINATION ${CMAKE_INSTALL_PREFIX})
-# install(DIRECTORY tests DESTINATION ${CMAKE_INSTALL_PREFIX})
-# # install(DIRECTORY unit_test DESTINATION ${CMAKE_INSTALL_PREFIX})
-# foreach(test ${tests})
-#   install(PROGRAMS tests/${test}/run_${test}.sh DESTINATION ${CMAKE_INSTALL_PREFIX}/tests/${test})
-# endforeach()
-# install(PROGRAMS tests/utils/gen_pts.py3 DESTINATION ${CMAKE_INSTALL_PREFIX}/tests/utils)
-# NOTE: PROGRAMS (vs. FILES) will automatically make the shell script executable
-install(PROGRAMS run.sh DESTINATION ${CMAKE_INSTALL_PREFIX})
-install(PROGRAMS plot.sh DESTINATION ${CMAKE_INSTALL_PREFIX})

@@ -22,7 +22,7 @@ export outfile=("${THIS_DIR}/cpp_results.txt")
 for ((i=0; i<=2; i++))
 do
     echo "==========================================="
-    ${THIS_DIR}/gen_pts.py3 ${dim[i]} ${N[i]} ${L[i]} ${dist[i]} ${pt_type[i]} --fname=${infile}
+    ${THIS_DIR}/utils/gen_pts_AXtest.py3 ${dim[i]} ${N[i]} ${L[i]} ${dist[i]} ${pt_type[i]} --fname=${infile}
     ${THIS_DIR}/AX_test ${infile} ${outfile} > a.out 2> a.err
 
     echo "num_threads = ${OMP_NUM_THREADS}"
@@ -34,6 +34,6 @@ do
     echo "infile =  ${infile}"
     echo "outfile =  ${outfile}"
 
-    ${THIS_DIR}/verify_arborx.py3 ${infile} ${outfile}
+    ${THIS_DIR}/utils/verify_arborx.py3 ${infile} ${outfile}
     echo "==========================================="
 done

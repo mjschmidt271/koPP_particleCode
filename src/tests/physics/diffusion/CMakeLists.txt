@@ -13,3 +13,9 @@ add_test(RW_test ${BASH_PROGRAM}
          ${CMAKE_CURRENT_BINARY_DIR}/run_rw_test.sh)
 # copy the data and utils dirs
 file(COPY utils data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+                ${CMAKE_INSTALL_PREFIX}/src/utils/python_scripts/gen_pts.py3
+                ${CMAKE_CURRENT_BINARY_DIR}/utils/gen_pts)
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+        ${CMAKE_INSTALL_PREFIX}/src/utils/python_scripts/choose_Nchunks.py3
+        ${CMAKE_CURRENT_BINARY_DIR}/utils/chunks_chooser)

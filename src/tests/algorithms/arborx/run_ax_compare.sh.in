@@ -43,7 +43,7 @@ do
 
     echo "==========================================="
 
-    ${THIS_DIR}/gen_pts.py3 ${dim[i]} ${N[i]} ${L[i]} ${dist[i]} ${pt_type[i]} --fname=${inputfile}
+    ${THIS_DIR}/utils/gen_pts_AXtest.py3 ${dim[i]} ${N[i]} ${L[i]} ${dist[i]} ${pt_type[i]} --fname=${inputfile}
     ${THIS_DIR}/AX_compare ${inputfile}
 done
 

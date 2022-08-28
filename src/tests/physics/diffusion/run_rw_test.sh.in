@@ -45,7 +45,7 @@ do
         export YAML_RUN=${THIS_DIR}/data/rw_test_${i}d_out${ens}.yaml
 
         # write the points to the bottom of the yaml input
-        ${THIS_DIR}/utils/gen_pts.py3 --infile=${YAML_IN} --outfile=${YAML_RUN}\
+        ${THIS_DIR}/utils/gen_pts --infile=${YAML_IN} --outfile=${YAML_RUN}\
                                       --iteration=${ens}
 
         # run the program and redirect the error output
