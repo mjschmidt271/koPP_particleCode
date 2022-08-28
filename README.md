@@ -6,6 +6,7 @@ This repository contains random walk particle tracking code with SPH-style mass 
 
 The only mandatory dependency is **cmake**; however, __python3__ is needed for testing/plotting/verification capability, along with some package dependencies, including __numpy__, __matplotlib__, and a few others.
 On Mac, your easiest option is to use [Homebrew](https://docs.brew.sh/Installation) and then
+<a name="brew_pip"></a>
 - `brew install cmake`
 - `brew install python`
 - `pip install numpy`
@@ -82,10 +83,14 @@ For that reason, the best bet is to clone the repository, as below in the build 
 1. Run the unit/verification tests to ensure the code is running properly.
     - `make test`
     - If tests fail, check out `<install location>/Testing/Temporary/LastTest.log` to get some info, and if it's not a straightforward issue, like a missing python package, then reach out or file a GitHub issue.
-1. To run a basic example, execute `./run.sh` from the `install (build)` directory.
-    - The example can be modified by editing the input file `src/data/particleParams.yaml`.
-        - Note that if you edit the input file or run script in the build directory, it will be overwritten by the original (in the source tree--e.g. `koPP_particleCode/src`) after doing another `make install`.
-        - Some additional examples can be found in the `tests` directory, containing `MT_only`, `RWMT`, and `RW_only` (MT = mass-transfer, RW = random walk).
+1. To run some basic examples, take a look in the `build/src/examples` directory. There you will find three examples in the directories `MT_only`, `RWMT`, and `RW_only` (MT = mass-transfer, RW = random walk). To run an example:
+    - `cd <example name>`
+    - `./run_<example name>.sh`
+    - To plot/examine the data, run the Jupyter notebook `plot_<example name>.ipynb`.
+        - `jupyter-notebook plot_<example name>.ipynb`, and a web browser window should open to use the notebook.
+        - This is another spot where you may run into missing python packages. If so, see [above](#brew_pip).
+    - The examples can be modified by editing the input file `<example name>/data/<example name>_input.yaml`.
+        - Note that if you edit the input file or run script here, in the build directory, it will be overwritten by the original (in the source tree--e.g. `koPP_particleCode/src/examples`) after doing another `make install`.
 
 ## Building for OpenMP (CPU)
 - Building with OpenMP does work on my personal Mac running Monterey (earlier versions also worked on Mojave) with `g++` versions 12 and 13 and `libomp` versions 11 and 14, as well as on a couple of Linux workstations, using various versions of the `g++` compiler.
