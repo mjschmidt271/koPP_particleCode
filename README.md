@@ -30,9 +30,9 @@ For that reason, the best bet is to clone the repository, as below in the build 
 ## Docker Build Instructions
 1. Clone the repository:
     - If you use https (this is the case if you haven't set up a [github ssh key](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh)):
-        - `git clone --recurse-submodules -j8 https://github.com/mschmidt271/koPP_particleCode.git`
+        - `git clone --recurse-submodules -j8 https://github.com/mjs271/koPP_particleCode.git`
     - If you use ssh:
-        - `git clone --recurse-submodules -j8 git@github.com:mschmidt271/koPP_particleCode.git`
+        - `git clone --recurse-submodules -j8 git@github.com:mjs271/koPP_particleCode.git`
     - Note: the `-j8` is a parallel flag, allowing git to fetch up to 8 submodules in parallel.
 1. `cd koPP_particleCode`
 
