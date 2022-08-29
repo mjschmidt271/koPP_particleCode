@@ -23,7 +23,7 @@ This dependency can be taken care of via [Homebrew](https://docs.brew.sh/Install
 Then run the notebook with `jupyter-notebook <notebook>.ipynb`, which will open a browser window.
 
 <ins>**Important Notes:**</ins>
-1. All of the above dependencies can be avoided by using the [Docker](https://docs.docker.com/get-docker/) build instructions below. However, first you must install Docker :upside_down_face: (`brew install docker`).
+1. All of the above dependencies can be avoided by using the [Docker](https://docs.docker.com/get-docker/) build instructions below. However, first you must install Docker :upside_down_face: (Hint: follow the above link).
 1. Simply downloading the zip file from the repository will not include the third-party libraries (Kokkos, Kokkos Kernels, yaml-cpp, ArborX), as they are git submodules.
 For that reason, the best bet is to clone the repository, as below in the build instructions.
 
