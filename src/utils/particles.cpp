@@ -12,6 +12,7 @@ Particles::Particles(const std::string& _input_file) {
   ko::Profiling::popRegion();
   ko::Profiling::pushRegion("ctor initialize position");
   // initialize the X view
+  // FIXME: this is layoutleft
   X = ko::View<Real**>("X", params.dim, params.Np);
   particleIO.set_positions(params, yaml_name, X);
   // initialize the mass view

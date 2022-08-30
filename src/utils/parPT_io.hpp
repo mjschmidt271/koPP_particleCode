@@ -15,7 +15,10 @@ namespace particles {
 // class for writing particle output
 class ParticleIO {
  private:
+  // maybe fstream?
   FILE* outfile;
+
+  // write .m file or python module?
 
  public:
   ParticleIO(Params& params, const std::string& yaml_name);

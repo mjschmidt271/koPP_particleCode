@@ -29,13 +29,13 @@ struct RandomWalk {
   Scalar mean, stddev;
 
   KOKKOS_INLINE_FUNCTION
-  // FIXME: determine which way this loop should go
+  // FIXME: determine which way this loop should go--probably opposite since I'm currently col-major
   void operator()(int j, int i) const {
     // Get a random number state from the pool for the active thread
     gen_type rgen = rand_pool.get_state();
 
     // draw random normal numbers, with mean and std deviation provided
-    pvec(j, i) = pvec(j, i) + rgen.normal(mean, stddev);
+    pvec(j, i) += rgen.normal(mean, stddev);
 
     // Give the state back, which will allow another thread to acquire it
     rand_pool.free_state(rgen);

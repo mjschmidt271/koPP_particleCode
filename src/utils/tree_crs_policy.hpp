@@ -22,7 +22,8 @@ struct Points {
     z = Kokkos::View<float*, MemorySpace>("pts z", N);
     // TODO: might want to find a more clever way to do this
       // see reverted commit 845decf for a failed attempt
-    if (dim == 1) {
+    if (dim == 1) {\
+      // use strided subview?
       Kokkos::deep_copy(x, Kokkos::subview(_X, 0, Kokkos::ALL()));
       Kokkos::deep_copy(y, 0.0);
       Kokkos::deep_copy(z, 0.0);
