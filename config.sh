@@ -44,9 +44,11 @@ export USE_CUDA=false
 # note that cuda builds require the CXX compiler to be the
 # kokkos-provided nvcc_wrapper
 export MAC_SERIAL_CPP="clang++"
+export MAC_SERIAL_CC="clang"
 export MAC_OMP_CPP="g++-12"
+export MAC_OMP_CC="gcc-12"
 export LINUX_CPP="g++"
-export S102_CPP="g++"
+export LINUX_CC="gcc"
 # ==============================================================================
 # I wouldn't change this unless you have good reason and know what you're doing
 # ==============================================================================
@@ -274,13 +276,16 @@ then
         fi
     else
         export CXX=$LINUX_CPP
+        export CC=$LINUX_CC
     fi
 else
     if [ "$USE_OPENMP" = true ]
     then
         export CXX=$MAC_OMP_CPP
+        export CC=$MAC_OMP_CC
     else
         export CXX=$MAC_SERIAL_CPP
+        export CC=$MAC_SERIAL_CC
     fi
 fi
 
