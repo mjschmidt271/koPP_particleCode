@@ -163,7 +163,7 @@ elif [ $MACHINE = clamps ]; then
         exit
     fi
 else
-    if [ $IN_CONTAINER == true ]; then
+    if [ "$IN_CONTAINER" = true ]; then
         export BUILD_TYPE="$DOCKER_BUILD_TYPE"
         export REAL_TYPE="$DOCKER_PRECISION"
         export SEARCH_TYPE="$DOCKER_SEARCH_TYPE"
@@ -298,7 +298,7 @@ rm -rf CMake*
     # the build spits out a lot of info
 # Below are the compiler and build type options from above
 # -D CMAKE_CXX_COMPILER=$CXX\
-# -D CMAKE_C_COMPILER=$CC\
+
 # -D PARPT_USE_OPENMP=$USE_OPENMP\
 # -D PARPT_USE_CUDA=$USE_CUDA
 cmake .. \
@@ -306,6 +306,7 @@ cmake .. \
     -D PARPT_BUILD_TYPE=$BUILD_TYPE \
     -D CMAKE_VERBOSE_MAKEFILE=ON \
     -D CMAKE_CXX_COMPILER=$CXX \
+    -D CMAKE_C_COMPILER=$CC \
     -D PARPT_USE_OPENMP=$USE_OPENMP \
     -D PARPT_USE_CUDA=$USE_CUDA \
     -D PARPT_PRECISION=$REAL_TYPE \
