@@ -33,7 +33,7 @@ jobs:
       continue-on-error: true
       id: run-clang-format
       with:
-        source: './src/utils/mass_transfer.hpp'
+        source: './src/clf_test'
         exclude: ''
         extensions: 'hpp,cpp'
         clangFormatVersion: 14
@@ -43,3 +43,4 @@ jobs:
       # env:
       #     STEPS_OUTPUTS: ${{ toJson(steps.run-clang-format.outputs) }}
       # run: echo "output is - $STEPS_OUTPUTS"
+    - name: evaluate test status
