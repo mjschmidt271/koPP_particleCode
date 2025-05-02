@@ -28,10 +28,13 @@ jobs:
     #     files: 'src/**/*.{cpp,hpp}'
     #     separator: " "
     # displays the diff, comparing to the changes that *would* be made
-    - uses: mjschmidt271/clang-format-lint-action@v0.0.1
+    - uses: mjschmidt271/clang-format-lint-action@9e34e55
+      id: run-clang-format
       with:
         source: './src'
         exclude: ''
         extensions: 'hpp,cpp'
         clangFormatVersion: 14
         style: llvm
+    - name: return files
+      run: echo "output is - ${{ steps.run-clang-format.ouput.files }}"
