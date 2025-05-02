@@ -42,7 +42,7 @@ jobs:
         style: llvm
     - name: return files
       env:
-          fail_files: ${{ steps.run-clang-format.outputs.files }}
+          fail_files: ${{ fromJson(steps.run-clang-format.outputs.files) }}
       run: |
         echo "output is - $fail_files"
         echo
