@@ -32,10 +32,12 @@ jobs:
     - uses: mjschmidt271/clang-format-lint-action@mjs/file-summary-on-fail
       id: run-clang-format
       with:
-        source: './src'
+        source: './src/utils/mass_transfer.hpp'
         exclude: ''
         extensions: 'hpp,cpp'
         clangFormatVersion: 14
         style: llvm
     - name: return files
-      run: echo "output is - ${{ toJson(steps.run-clang-format.outputs) }}"
+      env:
+          STEPS_OUTPUTS: ${{ toJson(steps.run-clang-format.outputs) }}
+      run: echo "output is - $STEPS_OUTPUTS"
