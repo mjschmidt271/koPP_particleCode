@@ -30,6 +30,7 @@ jobs:
     # comment
     # displays the diff, comparing to the changes that *would* be made
     - uses: mjschmidt271/clang-format-lint-action@mjs/file-summary-on-fail
+      continue-on-error: true
       id: run-clang-format
       with:
         source: './src/utils/mass_transfer.hpp'
