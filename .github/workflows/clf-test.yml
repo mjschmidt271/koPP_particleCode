@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   clang-format-linter:
-    if: ${{ github.repository == 'mjschmidt271-koPP_particleCode' }}
+    if: ${{ github.repository == 'mjschmidt271/koPP_particleCode' }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
