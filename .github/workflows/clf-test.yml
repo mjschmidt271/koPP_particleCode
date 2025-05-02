@@ -44,3 +44,5 @@ jobs:
       #     STEPS_OUTPUTS: ${{ toJson(steps.run-clang-format.outputs) }}
       # run: echo "output is - $STEPS_OUTPUTS"
     - name: evaluate test status
+      if: ${{ steps.run-clang-format.outcome }}
+      run: return 1
