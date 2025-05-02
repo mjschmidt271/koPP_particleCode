@@ -45,8 +45,8 @@ export USE_CUDA=false
 # kokkos-provided nvcc_wrapper
 export MAC_SERIAL_CPP="clang++"
 export MAC_SERIAL_CC="clang"
-export MAC_OMP_CPP="g++-12"
-export MAC_OMP_CC="gcc-12"
+export MAC_OMP_CPP="g++-13"
+export MAC_OMP_CC="gcc-13"
 export LINUX_CPP="g++"
 export LINUX_CC="gcc"
 # ==============================================================================
