@@ -39,6 +39,7 @@ jobs:
         clangFormatVersion: 14
         style: llvm
     - name: return files
-      env:
-          STEPS_OUTPUTS: ${{ toJson(steps.run-clang-format.outputs) }}
-      run: echo "output is - $STEPS_OUTPUTS"
+      run: echo "output is - ${{ steps.run-clang-format.outputs.files }}"
+      # env:
+      #     STEPS_OUTPUTS: ${{ toJson(steps.run-clang-format.outputs) }}
+      # run: echo "output is - $STEPS_OUTPUTS"
