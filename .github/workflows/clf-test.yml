@@ -44,16 +44,11 @@ jobs:
       env:
         fail_files: ${{ fromJson(steps.run-clang-format.outputs.files) }}
       run: |
-        # echo "output is - $fail_files[@]"
-        # echo
         echo "## Status: `clang-format` Check Failed" >> $GITHUB_STEP_SUMMARY
         echo "The following files require formatting:" >> $GITHUB_STEP_SUMMARY
         for f in ${fail_files[@]}; do
           echo "- `${f}`" >> $GITHUB_STEP_SUMMARY
         done
-      # env:
-      #     STEPS_OUTPUTS: ${{ toJson(steps.run-clang-format.outputs) }}
-      # run: echo "output is - $STEPS_OUTPUTS"
     - name: evaluate test status
       if: ${{ steps.run-clang-format.outcome }}
       run: exit 1
