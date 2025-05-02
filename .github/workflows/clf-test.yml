@@ -42,7 +42,7 @@ jobs:
         style: llvm
     - name: return files
       env:
-        FAIL_FILES: ${{ fromJSON(steps.run-clang-format.outputs.files) }}
+        FAIL_FILES: ${{ steps.run-clang-format.outputs.files }}
       run: |
         echo "output files - $FAIL_FILES"
       #   echo "## Status: `clang-format` Check Failed" >> $GITHUB_STEP_SUMMARY
