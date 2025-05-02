@@ -27,7 +27,7 @@ jobs:
     #     files: 'src/**/*.{cpp,hpp}'
     #     separator: " "
     # displays the diff, comparing to the changes that *would* be made
-    - uses: mjschmidt271/clang-format-lint-action
+    - uses: mjschmidt271/clang-format-lint-action@v0.0.1
       with:
         source: './src'
         exclude: ''
