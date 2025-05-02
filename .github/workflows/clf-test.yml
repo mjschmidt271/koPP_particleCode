@@ -27,6 +27,7 @@ jobs:
     #   with:
     #     files: 'src/**/*.{cpp,hpp}'
     #     separator: " "
+    # comment
     # displays the diff, comparing to the changes that *would* be made
     - uses: mjschmidt271/clang-format-lint-action@mjs/file-summary-on-fail
       id: run-clang-format
