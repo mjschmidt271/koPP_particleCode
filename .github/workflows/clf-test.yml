@@ -38,4 +38,4 @@ jobs:
         clangFormatVersion: 14
         style: llvm
     - name: return files
-      run: echo "output is - ${{ steps.run-clang-format.outputs.files }}"
+      run: echo "output is - ${{ toJson(steps.run-clang-format.outputs) }}"
