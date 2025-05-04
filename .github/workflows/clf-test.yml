@@ -46,13 +46,14 @@ jobs:
       env:
         FAIL_FILES: ${{ toJSON(steps.run-clang-format.outputs.files) }}
       run: |
-        echo "output files - $FAIL_FILES"
-        echo "first entry = ${FAIL_FILES[0]}"
+        # echo "output files - $FAIL_FILES"
+        # echo "first entry = ${FAIL_FILES[0]}"
+        cat $GITHUB_STEP_SUMMARY > gss_temp
         echo "## Status: `clang-format` Check Failed" >> $GITHUB_STEP_SUMMARY
         echo "The following files require formatting:" >> $GITHUB_STEP_SUMMARY
-        for f in ${fail_files[@]}; do
-          echo "- `${f}`" >> $GITHUB_STEP_SUMMARY
-        done
+        cat "${gss_temp}" >> $GITHUB_STEP_SUMMARY
+
+        # echo 'task goes here' | cat - todo.txt > temp && mv temp todo.txt
     - name: evaluate test status
       if: ${{ steps.run-clang-format.outcome }}
       run: exit 1
