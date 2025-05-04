@@ -44,7 +44,7 @@ jobs:
       run: echo "${{ steps.run-clang-format.outputs.files }}"
     - name: return files
       env:
-        FAIL_FILES: ${{ toJSON(steps.run-clang-format.outputs.files) }}
+        FAIL_FILES: ${{ steps.run-clang-format.outputs.files }}
       run: |
         # echo "output files - $FAIL_FILES"
         # echo "first entry = ${FAIL_FILES[0]}"
