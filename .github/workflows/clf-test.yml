@@ -40,11 +40,11 @@ jobs:
         extensions: 'hpp,cpp'
         clangFormatVersion: 14
         style: llvm
-    - name: simple print
-      run: echo "${{ steps.run-clang-format.outputs.files }}"
-    - name: return files
-      env:
-        FAIL_FILES: ${{ toJSON(steps.run-clang-format.outputs.files) }}
+    # - name: simple print
+    #   run: echo "${{ steps.run-clang-format.outputs.files }}"
+    # - name: return files
+    #   env:
+    #     FAIL_FILES: ${{ toJSON(steps.run-clang-format.outputs.files) }}
       run: |
         # echo "output files - $FAIL_FILES"
         # echo "first entry = ${FAIL_FILES[0]}"
