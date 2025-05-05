@@ -30,8 +30,6 @@ jobs:
     # comment
     # displays the diff, comparing to the changes that *would* be made
     - uses: mjschmidt271/clang-format-lint-action@mjs/file-summary-on-fail
-      # still want to return the offending files, so we'll use this step's
-      # "outcome" in a later step to manually fail the job
       continue-on-error: false
       id: run-clang-format
       with:
