@@ -1,13 +1,12 @@
 name: "clang format"
 
-# if .{cpp,hpp} files are touched in a PR, lint them!
-
 on:
   pull_request:
     branches: ["main"]
     paths:
       - 'src/**/*.cpp'
       - 'src/**/*.hpp'
+      - '.github/**/*'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
@@ -15,21 +14,17 @@ concurrency:
 
 jobs:
   clang-format-linter:
-    if: ${{ github.repository == 'mjschmidt271-koPP_particleCode' }}
+    if: ${{ github.repository == 'mjschmidt271/koPP_particleCode' }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    # - uses: tj-actions/changed-files@v46
-    #   id: changed-files
-    #   with:
-    #     files: 'src/**/*.{cpp,hpp}'
-    #     separator: " "
-    # displays the diff, comparing to the changes that *would* be made
-    - uses: mjschmidt271/clang-format-lint-action@v0.0.1
+    - uses: mjschmidt271/clang-format-lint-action@mjs/file-summary-on-fail
+      continue-on-error: false
+      id: run-clang-format
       with:
-        source: './src'
+        source: './src/clf_test'
         exclude: ''
         extensions: 'hpp,cpp'
         clangFormatVersion: 14
