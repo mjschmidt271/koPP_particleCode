@@ -40,18 +40,18 @@ jobs:
         extensions: 'hpp,cpp'
         clangFormatVersion: 14
         style: llvm
-    - name: simple print
-      run: echo "${{ steps.run-clang-format.outputs.files }}"
-    - name: return files
-      env:
-        FAIL_FILES: ${{ steps.run-clang-format.outputs.files }}
-      run: |
-        # echo "output files - $FAIL_FILES"
-        # echo "first entry = ${FAIL_FILES[0]}"
-        # cat $GITHUB_STEP_SUMMARY > gss_temp
-        # echo "## Status: `clang-format` Check Failed" >> $GITHUB_STEP_SUMMARY
-        # echo "The following files require formatting:" >> $GITHUB_STEP_SUMMARY
-        echo $FAIL_FILES >> $GITHUB_STEP_SUMMARY
+    # - name: simple print
+    #   run: echo "${{ steps.run-clang-format.outputs.files }}"
+    # - name: return files
+    #   env:
+    #     FAIL_FILES: ${{ steps.run-clang-format.outputs.files }}
+    #   run: |
+    #     # echo "output files - $FAIL_FILES"
+    #     # echo "first entry = ${FAIL_FILES[0]}"
+    #     # cat $GITHUB_STEP_SUMMARY > gss_temp
+    #     # echo "## Status: `clang-format` Check Failed" >> $GITHUB_STEP_SUMMARY
+    #     # echo "The following files require formatting:" >> $GITHUB_STEP_SUMMARY
+    #     echo $FAIL_FILES >> $GITHUB_STEP_SUMMARY
 
         # echo 'task goes here' | cat - todo.txt > temp && mv temp todo.txt
     - name: evaluate test status
