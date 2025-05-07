@@ -20,11 +20,11 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - uses: mjschmidt271/clang-format-lint-action@mjs/file-summary-on-fail
+    - uses: mjschmidt271/clang-format-lint-action@f/add-invocation
       continue-on-error: false
       id: run-clang-format
       with:
-        source: './src/clf_test'
+        source: './src/test-format'
         exclude: ''
         extensions: 'hpp,cpp'
         clangFormatVersion: 14
